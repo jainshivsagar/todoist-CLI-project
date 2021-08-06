@@ -2,7 +2,7 @@
   "name": "todoist",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "todoist.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start":"nodemon todoist.js"
@@ -18,5 +18,8 @@
     "nodemon": "^2.0.12",
     "readline-sync": "^1.4.10",
     "yargs": "^17.0.1"
+  },
+  "bin" : {
+    "todoist" : "todoist.js"
   }
 }

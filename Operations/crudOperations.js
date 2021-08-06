@@ -1,5 +1,4 @@
 const fetch = require("node-fetch");
-const chalk = require("chalk");
 const { config } = require("dotenv");
 const readlineSync = require("readline-sync");
 config(); //loading env variables to process.env object
@@ -10,10 +9,16 @@ const header = {
   Authorization: "Bearer " + process.env.API_TOKEN,
 };
 
+const tasksProps = ["id", "project_id", "content", "created"];
+
 async function createTask() {
   let task = {};
 
   console.log("Enter Following Details:- ");
+  task.project_id = readlineSync.question("Project Id:-  ");
+  task.project_id === ""
+    ? delete task.project_id
+    : (task.project_id = parseInt(task.project_id));
   task.content = readlineSync.question("Content:- ");
   task.description = readlineSync.question("Description:- ");
   task.due_string = readlineSync.question(
@@ -78,7 +83,6 @@ async function displayAllPojects() {
     console.log(err);
   }
 }
-
 async function displayAllTasks() {
   try {
     let response = await fetch(baseUrl + "tasks", {
@@ -87,25 +91,60 @@ async function displayAllTasks() {
 
     if (response.status == 200) {
       let data = await response.json();
-      let props = [
-        "id",
-        "project_id",
-        "section_id",
-        "content",
-        "completed",
-        "created",
-        "url",
-      ];
-      console.table(data, props);
+      console.table(data, tasksProps);
     }
   } catch (err) {
     console.log(err);
   }
 }
+async function displayTasksByProjectId(pid) {
+  try {
+    let response = await fetch(baseUrl + "tasks?project_id=" + pid, {
+      headers: header,
+    });
+
+    if (response.status == 200) {
+      let data = await response.json();
+      console.table(data, tasksProps);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+async function displayProjectById(pid) {
+  try {
+    let response = await fetch(baseUrl + "projects/" + pid, {
+      headers: header,
+    });
+
+    if (response.status == 200) {
+      let data = await response.json();
+      console.table(data);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+// async function displayAllTasks() {
+//   try {
+//     let response = await fetch(baseUrl + "tasks", {
+//       headers: header,
+//     });
+
+//     if (response.status == 200) {
+//       let data = await response.json();
+//       console.table(data, tasksProps);
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
 module.exports = {
   createTask,
   deleteTask,
   closeTask,
   displayAllPojects,
   displayAllTasks,
+  displayTasksByProjectId,
+  displayProjectById,
 };
