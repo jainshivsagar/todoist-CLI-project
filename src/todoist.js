@@ -19,7 +19,9 @@ const {
 const { checkApiToken } = require("./config");
 const options = [
   "New Task",
+  "Update Task",
   "Close A Task",
+  "Reopen Task",
   "Delete A Task",
   "Show All Tasks",
   "Show Tasks Of A Project",
@@ -48,21 +50,27 @@ const options = [
         await addTask();
         break;
       case 2:
-        await closeTask();
+        await updateTask();
         break;
       case 3:
-        await deleteTask();
+        await closeTask();
         break;
       case 4:
-        await displayAllActiveTasks();
+        await reOpenTask();
         break;
       case 5:
-        await displayTaskByProjectId();
+        await deleteTask();
         break;
       case 6:
-        await displayProjectById();
+        await displayAllActiveTasks();
         break;
       case 7:
+        await displayTaskByProjectId();
+        break;
+      case 8:
+        await displayProjectById();
+        break;
+      case 9:
         await displayAllProjects();
         break;
     }

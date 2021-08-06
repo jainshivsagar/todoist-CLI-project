@@ -8,6 +8,7 @@ const header = {
   "Content-Type": "application/json",
   Authorization: "Bearer " + process.env.API_TOKEN,
 };
+
 function addTask(task) {
   return fetch(BASE_URL + "tasks", {
     method: "POST",
@@ -15,8 +16,8 @@ function addTask(task) {
     headers: header,
   });
 }
-function updateTask(task) {
-  return fetch(BASE_URL + "tasks/" + task.id, {
+function updateTask(task, id) {
+  return fetch(BASE_URL + "tasks/" + id, {
     method: "POST",
     body: JSON.stringify(task),
     headers: header,
@@ -53,7 +54,6 @@ function getTaskByProjectId(pid) {
   });
 }
 function getAllActiveTasks() {
-  console.log("header", header);
   return fetch(BASE_URL + "tasks", {
     method: "GET",
     headers: header,

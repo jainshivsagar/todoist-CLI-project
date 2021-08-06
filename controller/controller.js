@@ -22,14 +22,14 @@ async function addTask() {
 }
 
 async function updateTask() {
-  const task = inputTask();
+  const task = inputTask("Task");
+  id = task.id;
+  delete task.id;
   try {
-    const res = await api.updateTask(task);
+    const res = await api.updateTask(task, id);
 
     if (res.status == 204) {
-      let data = await res.json();
-      console.log("Task Created Successfully");
-      console.table(data);
+      console.log("Task Update Successfully");
     } else {
       console.log(res.statusText);
     }
@@ -139,24 +139,7 @@ async function displayProjectById() {
 }
 function inputTask() {
   const task = {};
-  do {
-    task.project_id = readlineSync.question("Project Id:-  ");
-
-    task.project_id === ""
-      ? delete task.project_id
-      : (task.project_id = parseInt(task.project_id.trim()));
-
-    if (isNaN(task.project_id)) {
-      break;
-    } else {
-      console.warn(
-        chalk.yellow(
-          "Project Id should be number or empty(Empty project Id leads to add task to Index)."
-        )
-      );
-    }
-  } while (true);
-
+  task.id = inputId("Task");
   task.content = readlineSync.question("Content:- ");
   task.description = readlineSync.question("Description:- ");
   task.due_string = readlineSync.question(
@@ -169,11 +152,10 @@ function inputTask() {
 function inputId(text) {
   let id = 0;
   do {
-    id = readlineSync.question(text + " Id:-  ");
+    id = readlineSync.question(text + " Id:-  ").trim();
 
-    id = parseInt(id.trim());
-
-    if (!isNaN(id)) {
+    if (id != "" && !isNaN(id)) {
+      id = parseInt(id);
       console.log(id);
       return id;
     } else {
