@@ -5,7 +5,7 @@ const api = require("../api/todoistAPIMethods");
 const tasksProps = ["id", "project_id", "content", "created"];
 const projectProps = ["id", "name", "url"];
 async function addTask() {
-  const task = inputTask();
+  const task = inputTask("Project");
   try {
     const res = await api.addTask(task);
 
@@ -137,9 +137,9 @@ async function displayProjectById() {
     console.log(err);
   }
 }
-function inputTask() {
+function inputTask(text) {
   const task = {};
-  task.id = inputId("Task");
+  task.id = inputId(text);
   task.content = readlineSync.question("Content:- ");
   task.description = readlineSync.question("Description:- ");
   task.due_string = readlineSync.question(
